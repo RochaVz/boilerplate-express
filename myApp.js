@@ -3,14 +3,14 @@ let express = require("express");
 let app = express();
 require("dotenv").config();
 
-//#1
+//#1 meet the node console
 // console.log("Hello World")
 
-//4
+//4 serve static assets
 
 app.use("/public", express.static(__dirname + "/public"));
 
-//#7
+//#7 implement a Root-Level Request Logger Middleware
 app.use((req, res, next) => {
   let string = `${req.method} ${req.path} - ${req.ip}`;
   console.log(string);
@@ -18,23 +18,23 @@ app.use((req, res, next) => {
   next();
 });
 
-//2#
+//2# start a working express server
 app.get("/", (req, res) => {
   res.send("Hello Express");
 });
 
-//3#
+//3# serve an HTML file
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/views/index.html");
 });
 
-//#5
+//#5 serve JSON on a specific route
 
 // app.get("/json", (req, res) => {
 //   res.json({ message: "Hello json" });
 // });
 
-//#6
+//#6 use .env file
 app.get("/json", (req, res) => {
   if (process.env.MESSAGE_STYLE === "uppercase") {
     res.json({ message: "HELLO JSON" });
@@ -43,7 +43,7 @@ app.get("/json", (req, res) => {
   }
 });
 
-//#8
+//#8 chain middleware to create a time server
 app.get(
   "/now",
   (req, res, next) => {
@@ -55,18 +55,23 @@ app.get(
   },
 );
 
-//9#
+//9# get route parameter input from the client
 app.get("/:word/echo", (req, res) => {
   res.json({ echo: req.params.word });
 });
 
-//10#
+//10# get query parameter input from the client
 app.get("/name", (req, res) => {
   res.json({ name: `${req.query.first} ${req.query.last}` });
 });
 
-//11#
+//11# use body-parser to parse POST requests
 app.use(bodyParser.urlencoded({ extended: false }));
+
+//12# get data from POST request
+app.post("/name", (req, res) => {
+  res.json({ name: `${req.body.first} ${req.body.last}` });
+});
 
 module.exports = app;
 
